@@ -538,6 +538,7 @@ GameObject:
   - component: {fileID: 9001860525564414215}
   - component: {fileID: 9001860525564414200}
   - component: {fileID: 9001860525564414201}
+  - component: {fileID: 1688971049714721695}
   m_Layer: 5
   m_Name: MainUIBattlePopup
   m_TagString: Untagged
@@ -630,6 +631,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1688971049714721695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001860525564414202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4939f4a2960b3a94dbc11e600f2a232c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9001860525811750359
 GameObject:
   m_ObjectHideFlags: 0
