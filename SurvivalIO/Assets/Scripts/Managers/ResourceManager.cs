@@ -55,6 +55,6 @@ public class ResourceManager
             return;
         }
 
-        Object.Destroy(go);    
+        Object.Destroy(go);
     }
 }

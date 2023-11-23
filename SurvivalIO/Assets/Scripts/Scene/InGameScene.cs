@@ -12,6 +12,8 @@ public class InGameScene : BaseScene
         }
 
         SceneType = Define.Scene.InGame;
+        Managers.GameManager.StartGame();
+
         return true;
     }
 }
