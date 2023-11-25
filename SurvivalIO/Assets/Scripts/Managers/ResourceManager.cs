@@ -6,10 +6,12 @@ using UnityEngine;
 public class ResourceManager
 {
     public Dictionary<string, Sprite> Sprites { get; private set; }
+    public Dictionary<string, AnimationClip> Animations { get; private set; }
 
     public void Init()
     {
         Sprites = new Dictionary<string, Sprite>();
+        Animations = new Dictionary<string, AnimationClip>();
     }
 
     public T Load<T>(string path) where T : Object
@@ -24,6 +26,18 @@ public class ResourceManager
             Sprite sp = Resources.Load<Sprite>(path);
             Sprites.Add(path, sp);
             return sp as T;
+        }
+
+        if (typeof(T) == typeof(AnimationClip))
+        {
+            if (Animations.TryGetValue(path, out AnimationClip animationClip))
+            {
+                return animationClip as T;
+            }
+
+            AnimationClip anim = Resources.Load<AnimationClip>(path);
+            Animations.Add(path, anim);
+            return anim as T;
         }
 
         return Resources.Load<T>(path);

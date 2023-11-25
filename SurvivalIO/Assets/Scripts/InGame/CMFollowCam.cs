@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class CMFollowCam : MonoBehaviour
 {
-    public void Init(GameObject targetObject)
+    public void Init(Transform target)
     {
         CinemachineVirtualCamera cmVirtualCam = Utils.GetOrAddComponent<CinemachineVirtualCamera>(gameObject);
 
-        cmVirtualCam.Follow = targetObject.transform;
+        cmVirtualCam.Follow = target;
     }
 }

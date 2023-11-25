@@ -13,4 +13,20 @@ public class Define
         Main,
         InGame
     }
+
+    public enum SpawnableType
+    {
+        Default,        
+        Enemy,
+        Item
+    }
+
+    public enum CharacterType
+    {
+        Default,
+        Player,
+        Enemy01,
+        Enemy02,
+        Enemy03
+    }
 }

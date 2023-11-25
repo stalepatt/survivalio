@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,18 +10,22 @@ public class PlayerCharacter : CharacterBase
     private Vector2 _inputVector;
     private bool _isReversed;
 
+    public event Action OnDie;
+
     private void Awake()
     {
         Init();
     }
 
-    public override bool Init()
+    public override bool Init(Define.CharacterType character = Define.CharacterType.Player)
     {
-        if (base.Init() == false) // already initialized
+        if (base.Init(Define.CharacterType.Player) == false) // already initialized
         {
             return false;
         }
-
+        
+        Managers.GameManager.Player = this;
+        _renderer.sortingOrder = 5;        
         _input = Utils.GetOrAddComponent<PlayerInput>(gameObject);
 
         return true;
@@ -28,7 +33,7 @@ public class PlayerCharacter : CharacterBase
 
     protected override void SetTargetPosition()
     {
-        _targetPosition = _inputVector * Stat.Speed * Time.fixedDeltaTime;
+        _targetPosition = _inputVector * (Stat.Speed * Time.fixedDeltaTime);
     }
 
     protected override bool IsReverseDirection()
@@ -46,5 +51,11 @@ public class PlayerCharacter : CharacterBase
     {
         _inputVector = value.Get<Vector2>();
         SetTargetPosition();
+    }
+
+    protected override void Die()
+    {
+        // 게임 오버
+        OnDie.Invoke();
     }
 }
