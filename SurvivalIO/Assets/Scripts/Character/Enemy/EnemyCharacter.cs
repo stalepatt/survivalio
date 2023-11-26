@@ -5,7 +5,9 @@ using UnityEngine;
 public class EnemyCharacter : CharacterBase, ISpawnable
 {
     private Transform _target;
+
     public event Action OnDie;
+
     public override bool Init(Define.CharacterType characterType = Define.CharacterType.Enemy01)
     {
         if (base.Init(Define.CharacterType.Enemy01) == false)
@@ -60,10 +62,11 @@ public class EnemyCharacter : CharacterBase, ISpawnable
         return Define.SpawnableType.Enemy;
     }
         
-    private const int INDEX_OFFSET = 1; // CharacterID => 0 : Default, 1 : Player
     public int GetIndex()
     {
-        int enemyIndex = Mathf.Max(INDEX_OFFSET, Stat.CharacterID - INDEX_OFFSET);
+        int indexOffset = (int)Define.CharacterType.Enemy01 - 1;
+        int enemyIndex = Mathf.Max(1, Stat.CharacterID - indexOffset);
+
         return enemyIndex;
     }
 }
