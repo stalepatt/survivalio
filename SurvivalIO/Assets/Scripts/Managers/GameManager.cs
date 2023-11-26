@@ -49,6 +49,6 @@ public class GameManager
     public void EndGame()
     {
         CurrentChapter.End();
-        Managers.UIManager.ShowPopupUI<EndGamePopup>();
+        Managers.UIManager.ShowPopupUI<IngameResultPopup>();
     }
 }
