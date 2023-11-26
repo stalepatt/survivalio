@@ -13,9 +13,4 @@ public class PoolManager
         EnemyPool = new Pool<EnemyCharacter>();
         EnemyPool.Init(ObjectContainer);
     }
-
-    private void Spawn()
-    {
-
-    }
 }

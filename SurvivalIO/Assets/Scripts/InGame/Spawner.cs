@@ -4,17 +4,50 @@ using UnityEngine.Pool;
 
 public class Spawner
 {
-    private GameObject ObjectContainer;
-    private Pool<EnemyCharacter> Enemy;
-
-    public void Init()
+    public void Spawn(Define.SpawnableType spawnable, Define.CharacterType enemyID = Define.CharacterType.Default, Define.ItemType itemID = Define.ItemType.Default)
     {
-        Managers.ResourceManager.Destroy(ObjectContainer);
+        switch (spawnable)
+        {
+            case Define.SpawnableType.Enemy:
+                SpawnEnemy(enemyID);
+                break;
 
-        ObjectContainer = new GameObject("Object Containers");
-        Enemy = new Pool<EnemyCharacter>();
-        Enemy.Init(ObjectContainer);
+            case Define.SpawnableType.Item:
+                SpawnItem(itemID);
+                break;
+
+            case Define.SpawnableType.Exp:
+                SpawnExp();
+                break;
+
+            case Define.SpawnableType.Default:
+
+                return;
+        }
     }
 
+    public void SpawnEnemy(Define.CharacterType enemyID)
+    {
 
+    }
+
+    public void SpawnItem(Define.ItemType itemID)
+    {
+
+    }
+
+    public void SpawnExp()
+    {
+
+    }
+
+    public void SpawnBullet()
+    {
+
+    }
+
+    public void StartWave(int chapterID)
+    {
+        // GetWaveData(chpterID)        
+    }
 }

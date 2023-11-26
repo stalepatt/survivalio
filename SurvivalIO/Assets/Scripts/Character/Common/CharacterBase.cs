@@ -60,7 +60,7 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
         _renderer.flipX = IsReverseDirection();
     }
     protected abstract bool IsReverseDirection();
-    protected CharacterStatData SetInitialStat(Define.CharacterType character) // 임시, 생성시 Stat 정보 넘겨주도록
+    protected CharacterStatData SetInitialStat(Define.CharacterType character)
     {
         Stat = Managers.DataManager.CharacterStats[(int)character].Clone();
         GetSkill(Stat.DefaultSkill);

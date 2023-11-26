@@ -8,6 +8,4 @@
     public int Speed { get; set; }
     public int Exp { get; set; }
     public float Scale { get; set; }
-    public int SpawnStartTime { get; set; }
-    public int SpawnEndTime { get; set; }
 }
