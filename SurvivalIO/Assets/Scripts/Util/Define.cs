@@ -16,9 +16,10 @@ public class Define
 
     public enum SpawnableType
     {
-        Default,        
+        Default,
         Enemy,
-        Item
+        Item,
+        Exp
     }
 
     public enum CharacterType
@@ -28,5 +29,26 @@ public class Define
         Enemy01,
         Enemy02,
         Enemy03
+    }
+
+    public enum ItemType
+    {
+        Default,
+        ItemBox,
+        LuckyBox,
+        Gold,
+        Magnet,
+        Meat,
+        Bomb,
+        ExpSmall,
+        ExpGreen,
+        ExpBlue,
+        ExpYellow
+    }
+
+    public enum Chapters
+    {
+        Default,
+        WildStreet
     }
 }

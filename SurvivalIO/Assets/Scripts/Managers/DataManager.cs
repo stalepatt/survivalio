@@ -7,6 +7,10 @@ using UnityEngine;
 public class DataManager
 {
     public List<CharacterStatData> CharacterStats { get; private set; }
+    public List<EnemyInfoData> EnemyInfos { get; private set; }
+    public List<ChapterInfoData> ChapterInfos { get; private set; }
+    public List<WaveInfoData> WaveInfos { get; private set; }
+
     public void Init()
     {
         CharacterStats = LoadToList<CharacterStatData>(Path.Combine("Data", "CharacterStatData"));

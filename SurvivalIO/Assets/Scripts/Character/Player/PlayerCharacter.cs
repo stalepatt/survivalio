@@ -25,6 +25,9 @@ public class PlayerCharacter : CharacterBase
         }
         
         Managers.GameManager.Player = this;
+        OnDie -= Managers.GameManager.EndGame;
+        OnDie += Managers.GameManager.EndGame;
+
         _renderer.sortingOrder = 5;        
         _input = Utils.GetOrAddComponent<PlayerInput>(gameObject);
 
@@ -54,8 +57,7 @@ public class PlayerCharacter : CharacterBase
     }
 
     protected override void Die()
-    {
-        // 게임 오버
+    {        
         OnDie.Invoke();
     }
 }
