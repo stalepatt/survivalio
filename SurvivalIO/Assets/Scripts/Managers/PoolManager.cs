@@ -9,7 +9,7 @@ public class PoolManager
     {
         Managers.ResourceManager.Destroy(ObjectContainer);
 
-        ObjectContainer = new GameObject("Object Containers");
+        ObjectContainer = new GameObject("@ObjectContainers");
         EnemyPool = new Pool<EnemyCharacter>();
         EnemyPool.Init(ObjectContainer);
     }

@@ -23,7 +23,7 @@ public class CharacterDebugModule : MonoBehaviour
     {
 
     }
-
+    
     public void Update()
     {
 

@@ -14,6 +14,8 @@ namespace Util
 
         private CancellationTokenSource _cancellationToken;
 
+        public bool IsTimerOn { get; private set; }
+
         public void Init()
         {
             Elapsed = new ElapsedTime();
@@ -48,8 +50,12 @@ namespace Util
 
         public void Stop()
         {
-            Time.timeScale = 0;
-            _cancellationToken.Cancel();
+            if (IsTimerOn)
+            {
+                Time.timeScale = 0;
+                _cancellationToken.Cancel();
+                IsTimerOn = false;
+            }
         }
 
         public void Continue()
@@ -59,8 +65,12 @@ namespace Util
 
         public void Reset()
         {
-            _cancellationToken.Cancel();
-            _cancellationToken.Dispose();
+            if (IsTimerOn)
+            {
+                _cancellationToken.Cancel();
+                _cancellationToken.Dispose();
+                IsTimerOn = false;
+            }
 
             Elapsed.Clear();
         }
@@ -73,6 +83,7 @@ namespace Util
             {
                 Elapsed = new ElapsedTime();
             }
+            IsTimerOn = true;
 
             while (true)
             {
@@ -90,6 +101,7 @@ namespace Util
                     break;
                 }
             }
+            IsTimerOn = false;
         }
 
         public Timer(int maxTimeSec = int.MaxValue)

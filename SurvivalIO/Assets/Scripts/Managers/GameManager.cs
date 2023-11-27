@@ -35,11 +35,11 @@ public class GameManager
             .Init(target: Player.transform);
 
 
-        Managers.UIManager.ShowPopupUI<IngamePopup>(); // TO DO : Popup 프리팹 / 스크립트 구성
+        //Managers.UIManager.ShowPopupUI<IngamePopup>(); // TO DO : Popup 프리팹 / 스크립트 구성
 
         // TO DO : 초기 경험치 아이템 보상 생성
 
-        Managers.UIManager.ShowPopupUI<SelectSkillPopup>(); // TO DO : Popup 프리팹 / 스크립트 구성
+        //Managers.UIManager.ShowPopupUI<SelectSkillPopup>(); // TO DO : Popup 프리팹 / 스크립트 구성
 
         CurrentChapter.Start();
     }
@@ -49,6 +49,6 @@ public class GameManager
     public void EndGame()
     {
         CurrentChapter.End();
-        Managers.UIManager.ShowPopupUI<IngameResultPopup>();
+        Managers.UIManager.ShowPopupUI<IngameResultPopup>().SetInfo(CurrentChapter.CurrentBattleData);
     }
 }

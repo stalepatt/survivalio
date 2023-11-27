@@ -15,6 +15,11 @@ public class MainUIBattlePopup : UIPopup
 
         BindButton(typeof(Buttons));
 
-        GetButton((int)Buttons.GameStartButton).gameObject.BindEvent(() => Managers.SceneManager.ChangeScene(Define.Scene.InGame));
+        GetButton((int)Buttons.GameStartButton).gameObject.BindEvent(OnStartButtonClick);
+    }
+
+    private void OnStartButtonClick()
+    {
+        Managers.SceneManager.ChangeScene(Define.Scene.InGame);
     }
 }

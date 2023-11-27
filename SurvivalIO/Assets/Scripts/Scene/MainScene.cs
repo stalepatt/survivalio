@@ -12,9 +12,11 @@ public class MainScene : BaseScene
         }
 
         SceneType = Define.Scene.Main;
+
+        Managers.UIManager.CloseAllPopupUI();
         Managers.UIManager.ShowPopupUI<MainUICommonPopup>();
         Managers.UIManager.ShowPopupUI<MainUIBattlePopup>();
-        Debug.Log("Main Scene Init");
+        
         return true;
     }
 }

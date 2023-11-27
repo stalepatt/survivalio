@@ -16,6 +16,7 @@ public class UIManager
         if (_root == null)
         {
             _root = new GameObject { name = "@UI_Root" };
+            _root.transform.SetParent(Managers.Instance.transform);
         }
     }
 
