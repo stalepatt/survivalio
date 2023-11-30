@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Define;
 
 public class EnemyAnimationController : MonoBehaviour
 {
@@ -10,23 +11,19 @@ public class EnemyAnimationController : MonoBehaviour
     private Animator _animator;
     private AnimatorOverrideController _animatorOverrideController;
 
-    private void Awake()
-    {
-        Init();
-    }
-
     public void Init()
     {
-        _enemyCharacter = Utils.GetOrAddComponent<EnemyCharacter>(gameObject);               
+        _enemyCharacter = Utils.GetOrAddComponent<EnemyCharacter>(gameObject);
         _enemyCharacter.OnDie -= () => SetBool(true);
         _enemyCharacter.OnDie += () => SetBool(true);
 
         _animator = Utils.GetOrAddComponent<Animator>(gameObject);
+
         _animatorOverrideController = new AnimatorOverrideController(_animator.runtimeAnimatorController);
-        _animator.runtimeAnimatorController = _animatorOverrideController;        
-                
-        _animatorOverrideController["Idle"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Idle/Idle_{_enemyCharacter.GetIndex()}"); // name 자리에 ID 필요
-        _animatorOverrideController["Die"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Die/Die_{_enemyCharacter.GetIndex()}");        
+        _animatorOverrideController["Idle"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Idle/Idle_{_enemyCharacter.Stat.CharacterType}");
+        _animatorOverrideController["Die"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Die/Die_{_enemyCharacter.Stat.CharacterType}");
+
+        _animator.runtimeAnimatorController = _animatorOverrideController;
     }
 
     public void SetBool(bool value)

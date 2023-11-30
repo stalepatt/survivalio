@@ -1,0 +1,11 @@
+ChapterID,WaveCount,EnemyType,Amount,Interval,WaveEnd
+1,1,Enemy01,4,1,2
+1,2,Enemy01,12,1,4
+1,3,Enemy02,3,1,4
+1,4,Enemy03,12,1,5
+1,5,Enemy01,50,1,6
+1,6,Enemy01,32,1,8
+1,7,Enemy02,20,10,8
+1,8,Enemy03,36,1,9
+1,9,Enemy01,32,1,9
+1,10,Boss01,1,0,0

@@ -10,14 +10,17 @@ public class EnemyCharacter : CharacterBase, ISpawnable
 
     public override bool Init(Define.CharacterType characterType = Define.CharacterType.Enemy01)
     {
-        if (base.Init(Define.CharacterType.Enemy01) == false)
+        SetInitialStat(characterType);
+        gameObject.GetOrAddComponent<EnemyAnimationController>().Init();
+
+        if (base.Init(characterType) == false)
         {
             return false;
         }
 
         _renderer.sortingOrder = 4;
 
-        _target = Managers.GameManager.Player.transform;        
+        _target = Managers.GameManager.PlayerCharacter.transform;
 
         return true;
     }
@@ -34,17 +37,22 @@ public class EnemyCharacter : CharacterBase, ISpawnable
 
     protected override void SetTargetPosition()
     {
-        _target = Managers.GameManager.Player.transform;
+        _target = Managers.GameManager.PlayerCharacter.transform;
         if (_target == null)
         {
             Debug.Log("target null error");
         }
-        _targetPosition = (_target.position - this.transform.position) * (Stat.Speed * Time.fixedDeltaTime);
+        _targetPosition = (_target.position - this.transform.position).normalized * (Stat.Speed * Time.fixedDeltaTime);
     }
 
+    public void SetSpawnPosition(Vector3 spawnPosition)
+    {
+        transform.position = _target.position + spawnPosition;
+    }
     protected override void Die()
     {
         OnDie.Invoke();
+        Return();
     }
 
     public void Spawn()
@@ -54,15 +62,15 @@ public class EnemyCharacter : CharacterBase, ISpawnable
 
     public void Return()
     {
-        throw new System.NotImplementedException();
+        Managers.PoolManager.EnemyPool.Release(this);
     }
 
     public Define.SpawnableType GetSpawnableObjectType()
     {
         return Define.SpawnableType.Enemy;
     }
-        
-    public int GetIndex()
+
+    public int GetAnimIndex()
     {
         int indexOffset = (int)Define.CharacterType.Enemy01 - 1;
         int enemyIndex = Mathf.Max(1, Stat.CharacterID - indexOffset);

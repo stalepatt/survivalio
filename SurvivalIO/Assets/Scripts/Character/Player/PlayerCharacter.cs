@@ -12,9 +12,9 @@ public class PlayerCharacter : CharacterBase
 
     public event Action OnDie;
 
-    private void Awake()
+    private void Start()
     {
-        Init();
+        Init(Define.CharacterType.Player);
     }
 
     public override bool Init(Define.CharacterType character = Define.CharacterType.Player)
@@ -23,12 +23,12 @@ public class PlayerCharacter : CharacterBase
         {
             return false;
         }
-        
-        Managers.GameManager.Player = this;
+
+        Managers.GameManager.PlayerCharacter = this;
         OnDie -= Managers.GameManager.EndGame;
         OnDie += Managers.GameManager.EndGame;
 
-        _renderer.sortingOrder = 5;        
+        _renderer.sortingOrder = 5;
         _input = Utils.GetOrAddComponent<PlayerInput>(gameObject);
 
         return true;
@@ -57,7 +57,7 @@ public class PlayerCharacter : CharacterBase
     }
 
     protected override void Die()
-    {        
+    {
         OnDie.Invoke();
     }
 }
