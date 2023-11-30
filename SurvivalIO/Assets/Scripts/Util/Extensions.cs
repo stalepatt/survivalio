@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class Extensions
 {
@@ -12,4 +14,8 @@ public static class Extensions
     {
         UIBase.BindEvent(go, action, type);
     }
+
+    public static T GetRandomElement<T>(this T[] array) => array[Random.Range(0, array.Length)];
+
+    public static T GetRandomElement<T>(this T[] array, int start, int end) => array[Random.Range(start, end)];
 }

@@ -1,38 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-
-public class CharacterStatData : DataManager.ICsvParsable
+public class CharacterData : DataManager.ICsvParsable, DataManager.IKeyOwned<Define.CharacterType>
 {
     enum Fields
     {
         CharacterID,
+        HP,
         Attack,
         Speed,
-        Hp,
-        DefaultSkill
+        Exp,
+        Scale,
+        DefaultSkill,
+        CharacterTypeName,
+        Sprite
     }
     public int CharacterID { get; set; }
+    public int HP { get; set; }
     public int Attack { get; set; }
     public int Speed { get; set; }
-    public int Hp { get; set; }
+    public int Exp { get; set; }
+    public float Scale { get; set; }
     public string DefaultSkill { get; set; }
+    public string CharacterType { get; set; }
+
+    public string Sprite { get; set; }
+
+    public Define.CharacterType Key => (Define.CharacterType)CharacterID;
 
     public void Parse(DataManager.CsvItem[] row)
     {
         CharacterID = row[(int)Fields.CharacterID].ToInt();
+        HP = row[(int)Fields.HP].ToInt();
         Attack = row[(int)Fields.Attack].ToInt();
         Speed = row[(int)Fields.Speed].ToInt();
-        Hp = row[(int)Fields.Hp].ToInt();
+        Exp = row[(int)Fields.Exp].ToInt();
+        Scale = row[(int)Fields.Scale].ToFloat();
         DefaultSkill = row[(int)Fields.DefaultSkill].ToString();
+        CharacterType = row[(int)Fields.CharacterTypeName].ToString();
+        Sprite = row[(int)Fields.Sprite].ToString();
     }
 
-    public CharacterStatData Clone()
+    public CharacterData Clone()
     {
-        return (CharacterStatData)this.MemberwiseClone();
+        return (CharacterData)this.MemberwiseClone();
     }
 
-    public Dictionary<string,Skill> Skill { get; set; }
+    public Dictionary<string, Skill> Skill { get; set; }
     private const int MAX_SKILL_COUNT = 12;
 
     public void SetSkill(string name)

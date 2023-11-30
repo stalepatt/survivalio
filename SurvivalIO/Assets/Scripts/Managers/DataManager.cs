@@ -3,17 +3,33 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using UnityEngine;
+using static UnityEditor.Progress;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting.Dependencies.NCalc;
 
 public class DataManager
 {
-    public List<CharacterStatData> CharacterStats { get; private set; }
-    public List<EnemyInfoData> EnemyInfos { get; private set; }
+    public Dictionary<Define.CharacterType, CharacterData> CharacterDatas { get; private set; }
     public List<ChapterInfoData> ChapterInfos { get; private set; }
-    public List<WaveInfoData> WaveInfos { get; private set; }
+    public Dictionary<int, List<WaveInfoData>> WaveInfos { get; private set; }
 
     public void Init()
     {
-        CharacterStats = LoadToList<CharacterStatData>(Path.Combine("Data", "CharacterStatData"));
+        CharacterDatas = LoadToDictionary<Define.CharacterType, CharacterData>(Path.Combine("Data", "CharacterData"));
+
+        WaveInfos = new();
+        List<WaveInfoData> waveInfoDatas = LoadToList<WaveInfoData>(Path.Combine("Data", "WaveInfoData"));
+        foreach (WaveInfoData data in waveInfoDatas)
+        {
+            if (false == WaveInfos.ContainsKey(data.ChapterID))
+            {
+                WaveInfos[data.ChapterID] = new List<WaveInfoData> { new WaveInfoData() };
+                WaveInfos[data.ChapterID][0].ChapterID = data.ChapterID;
+            }
+
+            WaveInfos[data.ChapterID].Add(data);
+        }
+
     }
 
     public List<T> LoadToList<T>(string path)

@@ -30,7 +30,8 @@ public class Define
         Player,
         Enemy01,
         Enemy02,
-        Enemy03
+        Enemy03,
+        Boss01
     }
 
     public enum ItemType
@@ -46,6 +47,15 @@ public class Define
         ExpGreen,
         ExpBlue,
         ExpYellow
+    }
+
+    public enum SkillName
+    {
+        Default,
+        Kunai,
+        Guardian,
+        Drill,
+        Football
     }
 
     public enum Chapters

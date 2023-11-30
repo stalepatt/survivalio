@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.IO;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public abstract class CharacterBase : MonoBehaviour, IDamagable
 {
@@ -12,13 +13,35 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
     protected Vector2 _targetPosition;
     protected Animator _animator;
 
-    public CharacterStatData Stat { get; private set; }
+    public CharacterData Stat { get; private set; }
+
+
+    private void Awake()
+    {
+
+    }
+
+    private void FixedUpdate()
+    {
+        SetTargetPosition();
+        if (Stat.Speed != 0 && _targetPosition != _rigidbody.position)
+        {
+            Move();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        _renderer.flipX = IsReverseDirection();
+    }
+
     public virtual bool Init(Define.CharacterType characterType = Define.CharacterType.Default)
     {
         if (_init)
         {
             return false;
         }
+
         SetInitialStat(characterType);
 
         _rigidbody = gameObject.GetOrAddComponent<Rigidbody2D>();
@@ -34,35 +57,10 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
         return _init = true;
     }
 
-    private void Awake()
+    protected CharacterData SetInitialStat(Define.CharacterType character)
     {
-        Init();
-    }
-
-    private void FixedUpdate()
-    {
-        SetTargetPosition();
-        if (Stat.Speed != 0 && _targetPosition != _rigidbody.position)
-        {
-            Move();
-        }
-    }
-
-    private void Move()
-    {
-        _rigidbody.MovePosition(_rigidbody.position + _targetPosition);
-    }
-
-    protected abstract void SetTargetPosition();
-
-    private void LateUpdate()
-    {
-        _renderer.flipX = IsReverseDirection();
-    }
-    protected abstract bool IsReverseDirection();
-    protected CharacterStatData SetInitialStat(Define.CharacterType character)
-    {
-        Stat = Managers.DataManager.CharacterStats[(int)character].Clone();
+        Stat = Managers.DataManager.CharacterDatas[character].Clone();
+        transform.localScale *= Stat.Scale;
         GetSkill(Stat.DefaultSkill);
         return Stat;
     }
@@ -71,12 +69,20 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
     {
         Stat.SetSkill(name);
     }
+    protected abstract void SetTargetPosition();
+
+    private void Move()
+    {
+        _rigidbody.MovePosition(_rigidbody.position + _targetPosition);
+    }
+
+    protected abstract bool IsReverseDirection();
 
     public void TakeDamage(int damageAmount)
     {
-        Stat.Hp -= damageAmount;
+        Stat.HP -= damageAmount;
 
-        if (Stat.Hp <= 0)
+        if (Stat.HP <= 0)
         {
             Die();
         }

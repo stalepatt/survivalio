@@ -5,25 +5,27 @@ using Util;
 public class BattleChapter
 {
     // TO DO : Map 개선
+    private ChapterInfoData _chapterInfo;
+    private WaveController _currentWave;
     private bool _isClear;
-    private Util.Timer IngameTimer;
-    private ChapterInfoData ChapterInfo;
-    public BattleData CurrentBattleData;
+    public BattleData CurrentBattleData { get; private set; }
 
-    public void Init()
+    public void Init(int currentChapter)
     {
-        IngameTimer = new Util.Timer();
+        SetChapterInitialData(currentChapter);
     }
 
     public void Start()
     {
-        // TO DO : SetCurrentChapterMapObject
-        // TO DO : Spawner / WaveData 구성 이후 반영
-        // Managers.PoolManager.Spawner.SpawnExp();
-        if (CurrentBattleData == null)
+        // TO DO : 맵 형태에 따른 초기 생성 로직 Init으로 통일
+        GameObject mapObject = Managers.ResourceManager.Instantiate("Ingame/Map01");
+        foreach (Transform map in mapObject.GetComponentsInChildren<Transform>())
         {
-            new BattleData();
+            map.gameObject.GetOrAddComponent<MapController>();
         }
+
+        Managers.PoolManager.Spawner.SpawnDefaultExp();
+        _currentWave.StartWaveTask().Forget();
     }
     public void Clear()
     {
@@ -32,20 +34,17 @@ public class BattleChapter
     }
     public void End()
     {
-        IngameTimer.Stop();
-        CurrentBattleData.SetData(time: IngameTimer.Elapsed.Time);
     }
     public void SetChapterInitialData(int chapterID)
     {
-        Debug.Log($"chapterID : {chapterID}");
-        //ChapterInfo = Managers.DataManager.ChapterInfos[(int)chapterID];
-        CurrentBattleData = new BattleData((int)chapterID);
+        CurrentBattleData = new BattleData(chapterID);
+        //_chapterInfo = Managers.DataManager.ChapterInfos[chapterID];
+        _currentWave = new WaveController(chapterID);
     }
 
     public BattleChapter(int chapterID = (int)Define.Chapters.WildStreet)
     {
-        Init();
-        SetChapterInitialData(chapterID);
+        Init(chapterID);
     }
 }
 

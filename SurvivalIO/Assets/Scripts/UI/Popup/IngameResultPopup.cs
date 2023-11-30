@@ -95,6 +95,7 @@ public class IngameResultPopup : UIPopup
 
     public void CloseGame()
     {
+        Managers.PoolManager.Clear();
         Managers.SceneManager.ChangeScene(Define.Scene.Main);
     }
 }

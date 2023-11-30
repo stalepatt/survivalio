@@ -7,23 +7,28 @@ public class CharacterDebugModule : MonoBehaviour
     public CharacterBase Character;
 
     public int Speed;
+
+    public string Name;
+
     public List<string> SkillList;
 
     public void Awake()
     {
-        Character = Utils.GetOrAddComponent<CharacterBase>(gameObject);
-
-        Speed = Character.Stat.Speed;
-
-        SkillList = new List<string>();
 
     }
 
     public void Start()
     {
+        Character = Utils.GetOrAddComponent<CharacterBase>(gameObject);
+
+        Speed = Character.Stat.Speed;
+
+        Name = Character.Stat.CharacterType;
+
+        SkillList = new List<string>();
 
     }
-    
+
     public void Update()
     {
 
@@ -36,6 +41,6 @@ public class CharacterDebugModule : MonoBehaviour
 
     public void OnDisable()
     {
-
+        Character.TakeDamage(500);
     }
 }

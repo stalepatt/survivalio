@@ -2,15 +2,25 @@
 
 public class PoolManager
 {
-    private GameObject ObjectContainer;
-    private Pool<EnemyCharacter> EnemyPool;
+    public GameObject ObjectContainer { get; private set; }
+    public Pool<EnemyCharacter> EnemyPool;
     public Spawner Spawner;
     public void Init()
     {
+        Spawner = new Spawner();
+
         Managers.ResourceManager.Destroy(ObjectContainer);
 
         ObjectContainer = new GameObject("@ObjectContainers");
+        ObjectContainer.transform.SetParent(Managers.Instance.transform);
         EnemyPool = new Pool<EnemyCharacter>();
-        EnemyPool.Init(ObjectContainer);
+    }
+
+    public void Clear()
+    {
+        foreach (Transform child in ObjectContainer.transform)
+        {
+            Managers.ResourceManager.Destroy(child.gameObject);
+        }
     }
 }
