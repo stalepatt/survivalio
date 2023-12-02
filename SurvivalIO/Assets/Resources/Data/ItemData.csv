@@ -1,0 +1,12 @@
+ID,Sprite,ExpAmount,GoldAmount
+0,null,0,0
+1,Sprite/Item/EXP_1,1,0
+2,Sprite/Item/EXP_5,5,0
+3,Sprite/Item/EXP_10,10,0
+4,Sprite/Item/EXP_50,50,0
+5,Sprite/Item/Coin_1,0,1
+6,Sprite/Item/Coin_5,0,5
+7,Sprite/Item/Coin_10,0,10
+8,Meat,0,0
+9,Magnet,0,0
+10,Bomb,0,0
