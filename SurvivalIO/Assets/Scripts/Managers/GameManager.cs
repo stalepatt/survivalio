@@ -32,7 +32,7 @@ public class GameManager
             .GetOrAddComponent<CMFollowCam>()
             .Init(target: PlayerCharacter.transform);
 
-        //Managers.UIManager.ShowPopupUI<IngamePopup>(); // TO DO : Popup 프리팹 / 스크립트 구성
+        Managers.UIManager.ShowPopupUI<IngameBattlePopup>();
 
         CurrentChapter.Start();
         GameTimer.Start();
@@ -41,7 +41,15 @@ public class GameManager
 
     }
 
-    // TO DO : PauseGame / ReturnGame
+    public void PauseGame()
+    {
+        Debug.Log("Pause");
+    }
+
+    public void ReturnGame()
+    {
+
+    }
 
     public void EndGame()
     {

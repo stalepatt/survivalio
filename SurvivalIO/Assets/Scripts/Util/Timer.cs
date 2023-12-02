@@ -14,6 +14,8 @@ namespace Util
 
         private CancellationTokenSource _cancellationToken;
 
+        public event Action OnTimeChanged;
+
         public bool IsTimerOn { get; private set; }
 
         public void Init()
@@ -95,6 +97,8 @@ namespace Util
                     Elapsed.Sec = 0;
                     Elapsed.Min += 1;
                 }
+
+                OnTimeChanged.Invoke();
 
                 if (Elapsed.Time >= _maxTime)
                 {
