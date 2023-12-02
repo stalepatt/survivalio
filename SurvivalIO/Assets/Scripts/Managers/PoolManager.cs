@@ -5,6 +5,7 @@ public class PoolManager
     public GameObject ObjectContainer { get; private set; }
     public Pool<EnemyCharacter> EnemyPool;
     public Pool<Bullet> BulletPool;
+    public Pool<Exp> ExpPool;
     public Spawner Spawner;
     public void Init()
     {
@@ -16,6 +17,7 @@ public class PoolManager
 
         EnemyPool = new Pool<EnemyCharacter>();
         BulletPool = new Pool<Bullet>();
+        ExpPool = new Pool<Exp>();
     }
 
     public void Clear()

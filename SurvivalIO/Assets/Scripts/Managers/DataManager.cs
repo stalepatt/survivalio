@@ -13,10 +13,13 @@ public class DataManager
     public List<ChapterInfoData> ChapterInfos { get; private set; }
     public Dictionary<int, List<WaveInfoData>> WaveInfos { get; private set; }
     public Dictionary<string, List<SkillData>> SkillDatas { get; private set; }
+    public Dictionary<int, ItemData> ItemDatas { get; private set; }
 
     public void Init()
     {
         CharacterDatas = LoadToDictionary<Define.CharacterType, CharacterData>(Path.Combine("Data", "CharacterData"));
+        ItemDatas = LoadToDictionary<int, ItemData>(Path.Combine("Data", "ItemData"));
+
         SkillDatas = new();
         List<SkillData> skillDatas = LoadToList<SkillData>(Path.Combine("Data", "SkillData"));
         foreach (SkillData data in skillDatas)
