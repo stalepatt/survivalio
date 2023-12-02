@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyCharacter : CharacterBase, ISpawnable
@@ -19,8 +20,14 @@ public class EnemyCharacter : CharacterBase, ISpawnable
         }
 
         _renderer.sortingOrder = 4;
-
         _target = Managers.GameManager.PlayerCharacter.transform;
+
+        Action killCountAction = Managers.UIManager.FindPopup<IngameBattlePopup>()
+            .GetOrAddComponent<IngameBattlePopup>()
+            .SetCountText;
+
+        OnDie -= killCountAction;
+        OnDie += killCountAction;
 
         return true;
     }
