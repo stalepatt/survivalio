@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,7 +8,6 @@ using UnityEngine.Pool;
 
 public class Spawner
 {
-    Util.Timer spawnTimer;
     private List<CancellationTokenSource> _waveSpawnTaskCancellationToken;
     private Vector3[] _enemySpawnPoints;
 
@@ -25,10 +25,11 @@ public class Spawner
     private void SetEnemySpawnPoints()
     {
         _enemySpawnPoints = new Vector3[ENEMY_SPAWN_POINT_AMOUNT];
-        int angleDivided = 360 / ENEMY_SPAWN_POINT_AMOUNT;
+        float[] angleDivided = new float[ENEMY_SPAWN_POINT_AMOUNT];
+        Utils.GetAngleFromCircleDivide(ENEMY_SPAWN_POINT_AMOUNT, out angleDivided);
         for (int pointId = 0; pointId < ENEMY_SPAWN_POINT_AMOUNT; ++pointId)
         {
-            float angle = pointId * angleDivided * Mathf.Rad2Deg;
+            float angle = angleDivided[pointId] * Mathf.Rad2Deg;
             _enemySpawnPoints[pointId] = new Vector3(DISTANCE_X_CAMERA_OUT * Mathf.Cos(angle), DISTANCE_Y_CAMERA_OUT * Mathf.Sin(angle), 0);
         }
     }
@@ -65,7 +66,6 @@ public class Spawner
 
             waveTime -= waveData.Interval;
         }
-        Debug.Log($"Wave{waveData.WaveCount} end");
     }
 
     public void Spawn(Define.ItemType itemID)
@@ -78,7 +78,6 @@ public class Spawner
         if (Managers.PoolManager.EnemyPool.Root == null)
         {
             Managers.PoolManager.EnemyPool.Init(new GameObject("EnemyPool"), Managers.PoolManager.ObjectContainer);
-
         }
 
         EnemyCharacter newEnemy = Managers.PoolManager.EnemyPool.Get();
@@ -104,10 +103,7 @@ public class Spawner
 
     }
 
-    public void SpawnBullet()
-    {
 
-    }
 
     public Spawner()
     {

@@ -50,15 +50,22 @@ public class IngameBattlePopup : UIPopup
         currentGameTime.OnTimeChanged -= () => SetTimeText(currentGameTime);
         currentGameTime.OnTimeChanged += () => SetTimeText(currentGameTime);
     }
-
     public void SetTimeText(Util.Timer timer)
     {
         GetText((int)Texts.TimerText).text = $"{timer.Elapsed.Min:D2}:{timer.Elapsed.Sec:D2}";
     }
 
+    private int _killCount; // To Do : To the BattleData
     public void SetCountText()
     {
-        // TO DO : killCountData
+        ++_killCount;
+        if (_killCount > 100_000)
+        {
+            GetText((int)Texts.KillCountText).text = $"{_killCount/1_000}K";
+            return;
+        }
+
+        GetText((int)Texts.KillCountText).text = $"{_killCount}";
     }
 
     public void SetExpBar()

@@ -25,11 +25,14 @@ public class PlayerCharacter : CharacterBase
         }
 
         Managers.GameManager.PlayerCharacter = this;
+
         OnDie -= Managers.GameManager.EndGame;
         OnDie += Managers.GameManager.EndGame;
 
-        _renderer.sortingOrder = 5;
+        _renderer.sortingOrder = 10;
         _input = Utils.GetOrAddComponent<PlayerInput>(gameObject);
+
+        GetSkill(Stat.DefaultSkill);
 
         return true;
     }

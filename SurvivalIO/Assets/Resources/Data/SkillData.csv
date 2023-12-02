@@ -1,0 +1,31 @@
+ID,Name,NameKOR,Level,BulletDamage,Speed,ProjectileCount,ProjectileScale,ProjectileLifeTime,AttackInterval,UISprite,ProjectileSprite
+1,Kunai,"쿠나이",1,1.5,1,1,1,3,1,,
+1,Kunai,"쿠나이",2,2,1,2,1,3,1,,
+1,Kunai,"쿠나이",3,3,1,3,1,3,1,,
+1,Kunai,"쿠나이",4,4,1,4,1,3,1,,
+1,Kunai,"쿠나이",5,5.5,1,5,1,3,1,,
+1,Kunai,"유령 수리검",6,5.5,1,1,1,3,0,,
+2,Shotgun,"샷건",2,1.25,1,6,1,3,2,,
+2,Shotgun,"샷건",3,1.5,1,9,1,3,2,,
+2,Shotgun,"샷건",4,1.75,1,12,1,3,2,,
+2,Shotgun,"샷건",5,2,1,15,1,3,2,,
+2,Shotgun,"샷건",1,1,1,3,1,3,2,,
+2,Shotgun,"개틀링",6,2,1,1,1,3,0,,
+3,Defender,"수호자",1,0.5,1,2,1,5,7,,Sprite/Skill/Defender,Sprite/Skill/Defender
+3,Defender,"수호자",2,0.6,1.1,3,1,5,7,,Sprite/Skill/Defender,Sprite/Skill/Defender
+3,Defender,"수호자",3,0.7,1.2,4,1,5,7,,Sprite/Skill/Defender,Sprite/Skill/Defender
+3,Defender,"수호자",4,0.8,1.3,5,1,5,7,,Sprite/Skill/Defender,Sprite/Skill/Defender
+3,Defender,"수호자",5,0.9,1.4,6,1,5,7,,Sprite/Skill/Defender,Sprite/Skill/Defender
+3,Defender,"수비수",6,0.9,1.5,6,1,0,0,,Sprite/Skill/Defender,Sprite/Skill/Defender
+4,FootBall,"축구공",1,6,1,1,1,5,5,,
+4,FootBall,"축구공",2,6,1,2,1,5,5,,
+4,FootBall,"축구공",3,8,1.1,2,1,5,5,,
+4,FootBall,"축구공",4,10,1.2,2,1,5,5,,
+4,FootBall,"축구공",5,10,1.2,3,1,5,5,,
+4,FootBall,"양자 공""",6,10,1.2,6,1,5,5,,
+5,Drill,"드릴 샷",1,1,1,1,1,0,0,,
+5,Drill,"드릴 샷",2,1,1,2,1,0,0,,
+5,Drill,"드릴 샷",3,1,1.1,3,1,0,0,,
+5,Drill,"드릴 샷",4,1.3,1.1,4,1,0,0,,
+5,Drill,"드릴 샷",5,1.3,1.1,5,1,0,0,,
+5,Drill,"휘파람 화살""",6,13,1.2,1,1,0,0,,

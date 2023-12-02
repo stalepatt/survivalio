@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -14,19 +15,18 @@ public class CharacterDebugModule : MonoBehaviour
 
     public void Awake()
     {
-
+        
     }
 
     public void Start()
     {
         Character = Utils.GetOrAddComponent<CharacterBase>(gameObject);
-
+        
         Speed = Character.Stat.Speed;
 
         Name = Character.Stat.CharacterType;
 
         SkillList = new List<string>();
-
     }
 
     public void Update()
