@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.U2D;
 
-public abstract class CharacterBase : MonoBehaviour, IDamagable
+public abstract class CharacterBase : MonoBehaviour, IDamagable, IMovable
 {
     private bool _init = false;
 
@@ -14,7 +15,10 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
     protected Animator _animator;
 
     public CharacterData Stat { get; private set; }
+    public Dictionary<string, Skill> Skills { get; private set; }
+    public Transform SkillSet { get; private set; }
 
+    private const int MAX_SKILL_COUNT = 12;
 
     private void Awake()
     {
@@ -42,8 +46,6 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
             return false;
         }
 
-        SetInitialStat(characterType);
-
         _rigidbody = gameObject.GetOrAddComponent<Rigidbody2D>();
         _rigidbody.freezeRotation = true;
         _rigidbody.gravityScale = 0;
@@ -52,7 +54,7 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
 
         _animator = gameObject.GetOrAddComponent<Animator>();
 
-        CharacterDebugModule debug = Utils.GetOrAddComponent<CharacterDebugModule>(gameObject);
+        SetInitialStat(characterType);
 
         return _init = true;
     }
@@ -60,15 +62,43 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
     protected CharacterData SetInitialStat(Define.CharacterType character)
     {
         Stat = Managers.DataManager.CharacterDatas[character].Clone();
-        transform.localScale *= Stat.Scale;
-        GetSkill(Stat.DefaultSkill);
+        transform.localScale = Vector3.one * Stat.Scale;
+
         return Stat;
     }
 
-    public void GetSkill(string name)
+    public Skill GetSkill(string name)
     {
-        Stat.SetSkill(name);
+        if (name == "null")
+        {
+            return null;
+        }
+
+        if (Skills == null)
+        {
+            Skills = new Dictionary<string, Skill>(MAX_SKILL_COUNT);
+
+            SkillSet = new GameObject("@SkillSet").transform;
+            SkillSet.SetParent(this.gameObject.transform);
+        }
+
+        if (false == Skills.ContainsKey(name))
+        {
+            Skill newSkill =
+                Managers.ResourceManager.Instantiate($"Ingame/{name}", SkillSet)
+                .GetOrAddComponent<Skill>();
+
+            newSkill.Init(name);
+            Skills.Add(name, newSkill);
+
+            return newSkill;
+        }
+        else
+        {
+            return Skills[name];
+        }
     }
+
     protected abstract void SetTargetPosition();
 
     private void Move()
@@ -89,4 +119,15 @@ public abstract class CharacterBase : MonoBehaviour, IDamagable
     }
 
     protected abstract void Die();
+
+    void IMovable.Move()
+    {
+        Move();
+    }
+
+    public void MoveInSpeed(int speedDiff)
+    {
+        int accelatedSpeed = Stat.Speed * speedDiff;
+        _rigidbody.MovePosition((_rigidbody.position + _targetPosition) * accelatedSpeed);
+    }
 }

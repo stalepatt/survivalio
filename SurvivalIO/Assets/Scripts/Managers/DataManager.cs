@@ -12,10 +12,22 @@ public class DataManager
     public Dictionary<Define.CharacterType, CharacterData> CharacterDatas { get; private set; }
     public List<ChapterInfoData> ChapterInfos { get; private set; }
     public Dictionary<int, List<WaveInfoData>> WaveInfos { get; private set; }
+    public Dictionary<string, List<SkillData>> SkillDatas { get; private set; }
 
     public void Init()
     {
         CharacterDatas = LoadToDictionary<Define.CharacterType, CharacterData>(Path.Combine("Data", "CharacterData"));
+        SkillDatas = new();
+        List<SkillData> skillDatas = LoadToList<SkillData>(Path.Combine("Data", "SkillData"));
+        foreach (SkillData data in skillDatas)
+        {
+            if (false == SkillDatas.ContainsKey(data.Name))
+            {
+                SkillDatas[data.Name] = new List<SkillData> { new SkillData() };
+                SkillDatas[data.Name][0].ID = data.ID;
+            }
+            SkillDatas[data.Name].Add(data);
+        }
 
         WaveInfos = new();
         List<WaveInfoData> waveInfoDatas = LoadToList<WaveInfoData>(Path.Combine("Data", "WaveInfoData"));

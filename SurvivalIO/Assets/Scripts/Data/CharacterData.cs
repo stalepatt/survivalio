@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
 public class CharacterData : DataManager.ICsvParsable, DataManager.IKeyOwned<Define.CharacterType>
 {
     enum Fields
@@ -43,30 +46,5 @@ public class CharacterData : DataManager.ICsvParsable, DataManager.IKeyOwned<Def
     public CharacterData Clone()
     {
         return (CharacterData)this.MemberwiseClone();
-    }
-
-    public Dictionary<string, Skill> Skill { get; set; }
-    private const int MAX_SKILL_COUNT = 12;
-
-    public void SetSkill(string name)
-    {
-        if (name == null)
-        {
-            return;
-        }
-
-        if (Skill == null)
-        {
-            Skill = new Dictionary<string, Skill>(MAX_SKILL_COUNT);
-        }
-
-        if (false == Skill.ContainsKey(name))
-        {
-            Skill.Add(name, new Skill(name));
-        }
-        else
-        {
-            Skill[name].LevelUp();
-        }
     }
 }

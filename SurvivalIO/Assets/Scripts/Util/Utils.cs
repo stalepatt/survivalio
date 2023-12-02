@@ -50,4 +50,17 @@ public class Utils
         }
         return targetTransform.gameObject;
     }
+
+    public static float GetAngleFromCircleDivide(int count, out float[] array)
+    {        
+       array = new float[count]; 
+        
+        float angle = 360 / count;
+        for (int i = 0; i < count; ++i)
+        {
+            array[i] = i * angle;
+        }
+
+        return angle;
+    }
 }
