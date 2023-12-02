@@ -98,9 +98,16 @@ public class Spawner
 
     }
 
-    public void SpawnExp()
+    public void SpawnExp(int expAmount, Transform position)
     {
+        if (Managers.PoolManager.ExpPool.Root == null)
+        {
+            Managers.PoolManager.ExpPool.Init(new GameObject("ItemPool"), Managers.PoolManager.ObjectContainer);
+        }
 
+        Exp expItem = Managers.PoolManager.ExpPool.Get();
+
+        expItem.SetExp(expAmount, position);
     }
 
 

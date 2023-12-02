@@ -29,6 +29,11 @@ public class EnemyCharacter : CharacterBase, ISpawnable
         OnDie -= killCountAction;
         OnDie += killCountAction;
 
+        Action<int, Transform> spawnExp = Managers.PoolManager.Spawner.SpawnExp;
+
+        OnDie -= () => spawnExp(Stat.Exp, this.transform);
+        OnDie += () => spawnExp(Stat.Exp, this.transform);
+
         return true;
     }
 

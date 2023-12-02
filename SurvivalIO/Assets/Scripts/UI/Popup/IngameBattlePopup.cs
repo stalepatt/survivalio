@@ -61,15 +61,21 @@ public class IngameBattlePopup : UIPopup
         ++_killCount;
         if (_killCount > 100_000)
         {
-            GetText((int)Texts.KillCountText).text = $"{_killCount/1_000}K";
+            GetText((int)Texts.KillCountText).text = $"{_killCount / 1_000}K";
             return;
         }
 
         GetText((int)Texts.KillCountText).text = $"{_killCount}";
     }
 
-    public void SetExpBar()
+    public void SetExpBar(int currentExp, int maxExp)
     {
-        // TO DO : ExpData
+        float fillAmount = (float)currentExp / maxExp;
+        GetImage((int)Images.ExpBarFill).fillAmount = fillAmount;
+    }
+
+    public void SetLevelText(int level)
+    {
+        GetText((int)Texts.ExpBarLevelText).text = level.ToString();
     }
 }
