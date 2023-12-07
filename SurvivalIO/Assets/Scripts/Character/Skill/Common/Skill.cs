@@ -6,6 +6,7 @@ public abstract class Skill : MonoBehaviour
 {
     protected int _currentSkiilLevel;
     protected List<SkillData> _dataList;
+    private const int INITIAL_SKILL_LEVEL = 1;
     private const int MAX_SKILL_LEVEL = 5;
     public void Init(string name)
     {
@@ -14,7 +15,7 @@ public abstract class Skill : MonoBehaviour
             Managers.PoolManager.BulletPool.Init(new GameObject("BulletPool"), Managers.PoolManager.ObjectContainer);
         }
 
-        _currentSkiilLevel = 1;
+        _currentSkiilLevel = INITIAL_SKILL_LEVEL;
         _dataList = Managers.DataManager.SkillDatas[name];
         Attack();
     }

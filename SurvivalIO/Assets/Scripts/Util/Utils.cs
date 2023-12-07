@@ -27,14 +27,12 @@ public class Utils
 
             return transform.GetComponent<T>();
         }
-        else
+
+        foreach (T component in go.GetComponentsInChildren<T>())
         {
-            foreach (T component in go.GetComponentsInChildren<T>())
+            if (string.IsNullOrEmpty(name) || component.name == name)
             {
-                if (string.IsNullOrEmpty(name) || component.name == name)
-                {
-                    return component;
-                }
+                return component;
             }
         }
 
@@ -52,10 +50,10 @@ public class Utils
     }
 
     public static float GetAngleFromCircleDivide(int count, out float[] array)
-    {        
-       array = new float[count]; 
-        
-        float angle = 360 / count;
+    {
+        array = new float[count];
+
+        float angle = 360f / count;
         for (int i = 0; i < count; ++i)
         {
             array[i] = i * angle;

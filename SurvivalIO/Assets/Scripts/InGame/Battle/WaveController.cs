@@ -2,18 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEngine;
 
 public class WaveController
 {
-    private int _currentWaveCount = 1;
+    private int _currentWaveCount;
+    private const int INITIAL_WAVE_COUNT = 1;
     private List<WaveInfoData> _waveInfos;
     private CancellationTokenSource _waveStopCancellationTokenSource;
-    public const int TIME_PER_WAVE = 30;
+    public const int TIME_PER_WAVE = 3;
     public void InitWave(int currentChapter)
     {
+        _currentWaveCount = INITIAL_WAVE_COUNT;
         _waveInfos = Managers.DataManager.WaveInfos[currentChapter];
         _waveStopCancellationTokenSource = new CancellationTokenSource();
+
+        Managers.GameManager.OnEndGame -= StopWave;
+        Managers.GameManager.OnEndGame += StopWave;
     }
 
     public async UniTaskVoid StartWaveTask()
@@ -31,7 +35,7 @@ public class WaveController
 
     public void StopWave()
     {
-
+        _waveStopCancellationTokenSource?.Cancel();
     }
 
     public WaveController(int ChapterID)

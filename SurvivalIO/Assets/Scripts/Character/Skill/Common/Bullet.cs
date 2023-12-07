@@ -45,7 +45,7 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        damagableObject.TakeDamage(_damage);        
+        damagableObject.TakeDamage(_damage);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -58,11 +58,10 @@ public class Bullet : MonoBehaviour
 
     private async UniTaskVoid StartProjectileLifeTimeTask(int lifeTime)
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(lifeTime));
+        await UniTask.Delay(TimeSpan.FromSeconds(lifeTime), cancellationToken: this.GetCancellationTokenOnDestroy());
         if (this.gameObject.activeSelf)
         {
             Managers.PoolManager.BulletPool.Release(this);
         }
     }
-
 }

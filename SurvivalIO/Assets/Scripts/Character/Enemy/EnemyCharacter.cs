@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyCharacter : CharacterBase, ISpawnable
@@ -22,19 +20,21 @@ public class EnemyCharacter : CharacterBase, ISpawnable
         _renderer.sortingOrder = 4;
         _target = Managers.GameManager.PlayerCharacter.transform;
 
-        Action killCountAction = Managers.UIManager.FindPopup<IngameBattlePopup>()
-            .GetOrAddComponent<IngameBattlePopup>()
-            .SetCountText;
-
-        OnDie -= killCountAction;
-        OnDie += killCountAction;
-
-        Action<int, Transform> spawnExp = Managers.PoolManager.Spawner.SpawnExp;
-
-        OnDie -= () => spawnExp(Stat.Exp, this.transform);
-        OnDie += () => spawnExp(Stat.Exp, this.transform);
-
         return true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerCharacter player = collision.gameObject.GetComponent<PlayerCharacter>();
+            player.TakeDamage(this.Stat.Attack);
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+
     }
 
     protected override bool IsReverseDirection()
@@ -64,12 +64,11 @@ public class EnemyCharacter : CharacterBase, ISpawnable
     protected override void Die()
     {
         OnDie.Invoke();
-        Return();
     }
 
     public void Spawn()
     {
-        throw new System.NotImplementedException();
+        Managers.PoolManager.EnemyPool.Get();
     }
 
     public void Return()
@@ -88,5 +87,10 @@ public class EnemyCharacter : CharacterBase, ISpawnable
         int enemyIndex = Mathf.Max(1, Stat.CharacterID - indexOffset);
 
         return enemyIndex;
+    }
+
+    private void OnDisable()
+    {
+        Return();
     }
 }
