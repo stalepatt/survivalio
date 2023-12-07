@@ -18,7 +18,7 @@ public class Defender : Skill
         while (Managers.SceneManager.CurrentSceneType == Define.Scene.InGame)
         {
             Fire();
-            await UniTask.Delay(TimeSpan.FromSeconds(_data.AttackInterval));
+            await UniTask.Delay(TimeSpan.FromSeconds(_data.AttackInterval), cancellationToken: this.GetCancellationTokenOnDestroy());
         }
     }
 
@@ -44,12 +44,13 @@ public class Defender : Skill
     public async UniTaskVoid DefenderPatternTask()
     {
         GameObject bullet = transform.GetChild(0).gameObject;
+
         while (bullet.activeSelf)
         {
             float speed = DEFAULT_SKILL_SPEED * _data.Speed;
             transform.Rotate(ROTATE_DIRECTION * speed * Time.deltaTime);
 
-            await UniTask.Yield();
+            await UniTask.Yield(cancellationToken: this.GetCancellationTokenOnDestroy());
         }
     }
     private void SetProjectilePosition(Transform projectile, int bulletCount)

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class IngameBattlePopup : UIPopup
+﻿public class IngameBattlePopup : UIPopup
 {
     enum Images
     {
@@ -45,27 +43,34 @@ public class IngameBattlePopup : UIPopup
         GetObject((int)Objects.CoinCount)
             .SetActive(false);
 
-        Util.Timer currentGameTime = Managers.GameManager.GameTimer;
-        SetTimeText(currentGameTime);
-        currentGameTime.OnTimeChanged -= () => SetTimeText(currentGameTime);
-        currentGameTime.OnTimeChanged += () => SetTimeText(currentGameTime);
-    }
-    public void SetTimeText(Util.Timer timer)
-    {
-        GetText((int)Texts.TimerText).text = $"{timer.Elapsed.Min:D2}:{timer.Elapsed.Sec:D2}";
+        Managers.GameManager.CurrentChapter.OnBattleDataChanged -= RefreshUI;
+        Managers.GameManager.CurrentChapter.OnBattleDataChanged += RefreshUI;
+
+        RefreshUI();
     }
 
-    private int _killCount; // To Do : To the BattleData
+    public void RefreshUI()
+    {
+        SetTimeText();
+        SetCountText();
+    }
+    public void SetTimeText()
+    {
+        BattleData currentBattleData = Managers.GameManager.CurrentChapter.CurrentBattleData;
+        GetText((int)Texts.TimerText).text = $"{currentBattleData.PlayTimeToMinute:D2}:{currentBattleData.PlayTimeToSec:D2}";
+    }
+
     public void SetCountText()
     {
-        ++_killCount;
-        if (_killCount > 100_000)
+        int killCount = Managers.GameManager.CurrentChapter.CurrentBattleData.KillCount;
+
+        if (killCount > 100_000)
         {
-            GetText((int)Texts.KillCountText).text = $"{_killCount / 1_000}K";
+            GetText((int)Texts.KillCountText).text = $"{killCount / 1_000}K";
             return;
         }
 
-        GetText((int)Texts.KillCountText).text = $"{_killCount}";
+        GetText((int)Texts.KillCountText).text = $"{killCount}";
     }
 
     public void SetExpBar(int currentExp, int maxExp)

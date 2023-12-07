@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterDebugModule : MonoBehaviour
 {
@@ -15,16 +16,16 @@ public class CharacterDebugModule : MonoBehaviour
 
     public void Awake()
     {
-        
+
     }
 
     public void Start()
     {
         Character = Utils.GetOrAddComponent<CharacterBase>(gameObject);
-        
+
         Speed = Character.Stat.Speed;
 
-        Name = Character.Stat.CharacterType;
+        Name = Character.Stat.CharacterTypeName;
 
         SkillList = new List<string>();
     }

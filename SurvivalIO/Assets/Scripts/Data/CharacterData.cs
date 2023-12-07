@@ -24,7 +24,7 @@ public class CharacterData : DataManager.ICsvParsable, DataManager.IKeyOwned<Def
     public int Exp { get; set; }
     public float Scale { get; set; }
     public string DefaultSkill { get; set; }
-    public string CharacterType { get; set; }
+    public string CharacterTypeName { get; set; }
 
     public string Sprite { get; set; }
 
@@ -39,7 +39,7 @@ public class CharacterData : DataManager.ICsvParsable, DataManager.IKeyOwned<Def
         Exp = row[(int)Fields.Exp].ToInt();
         Scale = row[(int)Fields.Scale].ToFloat();
         DefaultSkill = row[(int)Fields.DefaultSkill].ToString();
-        CharacterType = row[(int)Fields.CharacterTypeName].ToString();
+        CharacterTypeName = row[(int)Fields.CharacterTypeName].ToString();
         Sprite = row[(int)Fields.Sprite].ToString();
     }
 

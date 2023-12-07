@@ -20,8 +20,8 @@ public class EnemyAnimationController : MonoBehaviour
         _animator = Utils.GetOrAddComponent<Animator>(gameObject);
 
         _animatorOverrideController = new AnimatorOverrideController(_animator.runtimeAnimatorController);
-        _animatorOverrideController["Idle"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Idle/Idle_{_enemyCharacter.Stat.CharacterType}");
-        _animatorOverrideController["Die"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Die/Die_{_enemyCharacter.Stat.CharacterType}");
+        _animatorOverrideController["Idle"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Idle/Idle_{_enemyCharacter.Stat.CharacterTypeName}");
+        _animatorOverrideController["Die"] = Managers.ResourceManager.Load<AnimationClip>($"Anim/Enemy/Die/Die_{_enemyCharacter.Stat.CharacterTypeName}");
 
         _animator.runtimeAnimatorController = _animatorOverrideController;
     }

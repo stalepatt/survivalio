@@ -38,8 +38,8 @@ public class PlayerCharacter : CharacterBase
 
         Managers.GameManager.PlayerCharacter = this;
 
-        OnDie -= Managers.GameManager.EndGame;
-        OnDie += Managers.GameManager.EndGame;
+        OnDie -= Managers.GameManager.CurrentChapter.ChapterFail;
+        OnDie += Managers.GameManager.CurrentChapter.ChapterFail;
 
         _renderer.sortingOrder = 10;
         _input = Utils.GetOrAddComponent<PlayerInput>(gameObject);
@@ -69,6 +69,11 @@ public class PlayerCharacter : CharacterBase
     {
         _inputVector = value.Get<Vector2>();
         SetTargetPosition();
+    }
+
+    private void OnTest(InputValue value)
+    {
+        Managers.PoolManager.Spawner.SpawnBoss();
     }
 
     protected override void Die()

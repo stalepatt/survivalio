@@ -1,18 +1,25 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using Util;
 public class BattleChapter
 {
-    // TO DO : Map 개선
-    private ChapterInfoData _chapterInfo;
-    private WaveController _currentWave;
-    private bool _isClear;
+    private ChapterInfoData _chapterInfo; // TO DO : Map 개선에서 반영
+    public WaveController CurrentWave { get; private set; }
     public BattleData CurrentBattleData { get; private set; }
-
+    public event Action OnBattleDataChanged;
     public void Init(int currentChapter)
     {
         SetChapterInitialData(currentChapter);
+    }
+
+    public void SetChapterInitialData(int chapterID)
+    {
+        CurrentBattleData = new BattleData(chapterID);
+        //_chapterInfo = Managers.DataManager.ChapterInfos[chapterID]; TO DO : 챕터 추가 시 활용
+        CurrentWave = new WaveController(chapterID);
+
+        Util.Timer gameTimer = Managers.GameManager.GameTimer;
+        gameTimer.OnTimeChanged -= () => SetData(time: gameTimer.Elapsed.Time);
+        gameTimer.OnTimeChanged += () => SetData(time: gameTimer.Elapsed.Time);
     }
 
     public void Start()
@@ -24,22 +31,24 @@ public class BattleChapter
             map.gameObject.GetOrAddComponent<MapController>();
         }
 
+        Managers.PoolManager.Spawner.Init();
         Managers.PoolManager.Spawner.SpawnDefaultExp();
-        _currentWave.StartWaveTask().Forget();
+        CurrentWave.StartWaveTask().Forget();
     }
-    public void Clear()
+    public void ChapterClear() => EndChapter(isClear: true);
+    public void ChapterFail() => EndChapter(isClear: false);
+
+    private void EndChapter(bool isClear = false)
     {
-        _isClear = true;
-        End();
+        CurrentBattleData.SetData(isClear: isClear);
+
+        Managers.GameManager.EndGame();
     }
-    public void End()
+
+    public void SetData(int chapterID = 0, int killCount = 0, int gold = 0, int time = 0, bool isClear = false)
     {
-    }
-    public void SetChapterInitialData(int chapterID)
-    {
-        CurrentBattleData = new BattleData(chapterID);
-        //_chapterInfo = Managers.DataManager.ChapterInfos[chapterID];
-        _currentWave = new WaveController(chapterID);
+        CurrentBattleData.SetData(chapterID, killCount, gold, time, isClear);
+        OnBattleDataChanged?.Invoke();
     }
 
     public BattleChapter(int chapterID = (int)Define.Chapters.WildStreet)
@@ -62,11 +71,11 @@ public class BattleData
     {
         KillCount += killCount;
         GoldEarned += gold;
-        PlayTime = time;
-        if (isClear)
+        if (time != 0)
         {
-            IsClear = true;
+            PlayTime = time;
         }
+        IsClear = isClear;
     }
 
     public BattleData(int chapterID = 0)

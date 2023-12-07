@@ -1,8 +1,4 @@
-using Cinemachine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class GameManager
@@ -12,6 +8,10 @@ public class GameManager
     public BattleChapter CurrentChapter;
 
     public Util.Timer GameTimer;
+
+    public event Action OnEndGame;
+
+    public int BestTime { get; private set; }
     public void Init()
     {
         GameTimer = new Util.Timer();
@@ -37,13 +37,16 @@ public class GameManager
         CurrentChapter.Start();
         GameTimer.Start();
 
+        OnEndGame -= GameTimer.Clear;
+        OnEndGame += GameTimer.Clear;
+
         //Managers.UIManager.ShowPopupUI<SelectSkillPopup>(); // TO DO : Popup 프리팹 / 스크립트 구성
 
     }
 
     public void PauseGame()
     {
-        Debug.Log("Pause");
+        Time.timeScale = 0;
     }
 
     public void ReturnGame()
@@ -53,7 +56,21 @@ public class GameManager
 
     public void EndGame()
     {
-        CurrentChapter.End();
+        OnEndGame?.Invoke();
+
         Managers.UIManager.ShowPopupUI<IngameResultPopup>().SetInfo(CurrentChapter.CurrentBattleData);
+    }
+
+    public bool IsBestTime()
+    {
+        int currentPlayTime = CurrentChapter.CurrentBattleData.PlayTime;
+
+        if (currentPlayTime > BestTime)
+        {
+            BestTime = currentPlayTime;
+            return true;
+        }
+
+        return false;
     }
 }

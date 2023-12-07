@@ -14,13 +14,12 @@ public class Pool<T> where T : Component
         {
             _container.transform.SetParent(parentObject.transform);
         }
-        _pool = new(Create, OnGet, OnRelease, OnDestroy);
+        _pool = new(Create, OnGet, OnRelease, OnDestroy); // new 연산자 명시적으로 수정
     }
 
     protected virtual T Create()
     {
-        return Managers.ResourceManager.Instantiate($"Ingame/{typeof(T)}", _container.transform)
-            .GetOrAddComponent<T>();
+        return Managers.ResourceManager.Instantiate($"Ingame/{typeof(T)}", _container.transform).GetOrAddComponent<T>();
     }
     protected virtual void OnGet(T element) => element.gameObject.SetActive(true);
 

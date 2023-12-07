@@ -1,20 +1,20 @@
 ﻿using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class Spawner
 {
-    private List<CancellationTokenSource> _waveSpawnTaskCancellationToken;
+    private List<CancellationTokenSource> _waveSpawnTaskCancellationTokenList;
     private Vector3[] _enemySpawnPoints;
 
     public void Init()
     {
-        _waveSpawnTaskCancellationToken = new List<CancellationTokenSource>();
-        _waveSpawnTaskCancellationToken.Add(new CancellationTokenSource());
+        _waveSpawnTaskCancellationTokenList = new List<CancellationTokenSource>
+        {
+            new CancellationTokenSource()
+        };
 
         SetEnemySpawnPoints();
     }
@@ -36,22 +36,19 @@ public class Spawner
 
     public async UniTaskVoid WaveSpawnTask(WaveInfoData waveData)
     {
-        if (_waveSpawnTaskCancellationToken.Count <= waveData.WaveCount)
+        if (_waveSpawnTaskCancellationTokenList.Count <= waveData.WaveCount)
         {
-            _waveSpawnTaskCancellationToken.Add(new CancellationTokenSource());
-        }
-
-        if (waveData.Interval == 0)
-        {
-            foreach (CancellationTokenSource token in _waveSpawnTaskCancellationToken)
-            {
-                token.Cancel();
-            }
-
-            SpawnBoss(waveData.EnemyType);
+            _waveSpawnTaskCancellationTokenList.Add(new CancellationTokenSource());
         }
 
         int waveTime = (waveData.WaveEnd - waveData.WaveCount) * WaveController.TIME_PER_WAVE;
+
+        if (waveTime < 0)
+        {
+            await UniTask.WaitUntil(() => Managers.PoolManager.Clear(Managers.PoolManager.EnemyPool.Root));
+
+            SpawnBoss(waveData.EnemyType);
+        }
 
         while (waveTime > 0)
         {
@@ -62,15 +59,20 @@ public class Spawner
 
             await UniTask.Delay(
                 delayTimeSpan: TimeSpan.FromSeconds(waveData.Interval),
-                cancellationToken: _waveSpawnTaskCancellationToken[waveData.WaveCount].Token);
+                cancellationToken: _waveSpawnTaskCancellationTokenList[waveData.WaveCount].Token);
 
             waveTime -= waveData.Interval;
         }
+
     }
 
-    public void Spawn(Define.ItemType itemID)
+    public void CancelWaveSpawnTask()
     {
-
+        foreach (CancellationTokenSource token in _waveSpawnTaskCancellationTokenList)
+        {
+            token.Cancel();
+        }
+        Managers.GameManager.CurrentChapter.CurrentWave.StopWave();
     }
 
     public void SpawnEnemy(Define.CharacterType enemyType)
@@ -85,12 +87,26 @@ public class Spawner
         newEnemy.SetSpawnPosition(_enemySpawnPoints.GetRandomElement());
     }
 
+    private const int BOSS_SPAWN_OFFSET = 5;
+
     public void SpawnBoss(Define.CharacterType enemyType)
     {
+        Managers.PoolManager.EnemyPool.Init(new GameObject("BossPool"), Managers.PoolManager.ObjectContainer);
         EnemyCharacter boss = Managers.PoolManager.EnemyPool.Get();
+
         boss.Init(enemyType);
-        boss.OnDie -= Managers.GameManager.EndGame;
-        boss.OnDie += Managers.GameManager.EndGame;
+        boss.transform.position = Managers.GameManager.PlayerCharacter.transform.position + Vector3.up * BOSS_SPAWN_OFFSET;
+
+        boss.OnDie -= Managers.GameManager.CurrentChapter.ChapterClear;
+        boss.OnDie += Managers.GameManager.CurrentChapter.ChapterClear;
+    }
+
+    public void SpawnBoss()
+    {
+        CancelWaveSpawnTask();
+        Managers.PoolManager.Clear(Managers.PoolManager.EnemyPool.Root);
+
+        SpawnBoss(Define.CharacterType.Boss01);
     }
 
     public void SpawnDefaultExp()
@@ -110,10 +126,16 @@ public class Spawner
         expItem.SetExp(expAmount, position);
     }
 
-
-
-    public Spawner()
+    public void Clear()
     {
-        Init();
+        foreach (CancellationTokenSource token in _waveSpawnTaskCancellationTokenList)
+        {
+            if (token.Token != null)
+            {
+                token.Cancel();
+                token.Dispose();
+            }
+        }
+        _waveSpawnTaskCancellationTokenList.Clear();
     }
 }
